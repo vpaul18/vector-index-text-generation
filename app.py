@@ -23,8 +23,19 @@ from constants.persists import PERSIST_DIRECTORY
 os.environ["OPENAI_API_KEY"] = 'sk-YOUR_KEY'
 
 
-app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+def create_app():
+    app = Flask(__name__)
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+    if not os.path.exists('uploads'):
+        os.makedirs('uploads')
+    if not os.path.exists('persits'):
+        os.makedirs('persits')
+    
+    return app
+
+app = create_app()
+
 
 # Set up logging
 handler = RotatingFileHandler('app.log', maxBytes=10000, backupCount=1)
@@ -99,13 +110,6 @@ def handle_exception(e):
         return jsonify(error=str(e)), e.code
     app.logger.error(f"An error occurred: {e}")
     return jsonify(error="Internal Server Error"), 500
-
-@app.before_first_request
-def create_folders():
-    if not os.path.exists('uploads'):
-        os.makedirs('uploads')
-    if not os.path.exists('persits'):
-        os.makedirs('persits')
 
 @app.route("/")
 def hello_world():
