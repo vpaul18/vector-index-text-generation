@@ -13,6 +13,10 @@ Start the flask server:
 
 `` flask run --debug``
 
+Change the `HOST` vaiables to your flask server's address (http://127.0.0.1:5000 if you're running locally).
+
+
+Change the `os.environ["OPENAI_API_KEY"]` to your OpenAI API key in app.py.
 
 Run tests:
 
